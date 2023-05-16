@@ -1,1 +1,11 @@
-test
+server {
+    listen 80;
+    server_name virtualhost1.com;
+    root /var/www/virtualhost1;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+

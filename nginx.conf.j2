@@ -1,0 +1,22 @@
+# Это пример шаблона nginx.conf.j2
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+
+events {
+    worker_connections 768;
+}
+
+http {
+    server {
+        listen 80;
+        server_name example.com;
+        root /var/www/html;
+        index index.html;
+
+        location / {
+            try_files $uri $uri/ =404;
+        }
+    }
+}
+

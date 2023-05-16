@@ -18,3 +18,56 @@
         rule: allow
         port: '80'
         proto: tcp
+    - name: Copy nginx file
+      template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: 0644
+      notify: 
+        - Restart Nginx
+
+     - name: Upload Virtualhost1
+       template:
+         src: virtualhost1_template.conf.j2
+         dest: /etc/nginx/sites-available/virtualhost1.conf
+         owner: root
+         group: root
+         mode: 0644
+       notify: 
+          - Enable virtualhost1
+
+
+
+     - name: Upload Virtualhost2
+       template:
+         src: virtualhost2_template.conf.j2
+         dest:  /etc/nginx/sites-available/virtualhost2.conf
+         owner: root
+         group: root
+         mode: 0644
+       notify:
+          - Enable virtualhost2
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: reloaded
+
+
+    - name: Enable virtualhost1
+      file:
+        src: /etc/nginx/sites-available/virtualhost1.conf
+        dest: /etc/nginx/sites-enabled/virtualhost1.conf
+        state: link
+
+
+    - name: Enable virtualhost2
+      file:
+        src: /etc/nginx/sites-available/virtualhost2.conf
+        dest: /etc/nginx/sites-enabled/virtualhost2.conf
+        state: link
+
+
